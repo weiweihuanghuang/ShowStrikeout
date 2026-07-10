@@ -1,17 +1,20 @@
 # encoding: utf-8
 
 from __future__ import division, print_function, unicode_literals
-from GlyphsApp import *
-from GlyphsApp import objcObject
-from GlyphsApp.plugins import *
-from GlyphsApp.plugins import pathForResource
-from AppKit import NSButton, NSUserDefaultsController, NSTexturedRoundedBezelStyle, NSImageOnly, NSImageScaleNone, NSToggleButton, NSRectFill, NSNotificationCenter
+import objc
 import traceback
+from GlyphsApp import Glyphs, objcObject, TABDIDOPEN, TABWILLCLOSE, DRAWBACKGROUND, DRAWINACTIVE
+from GlyphsApp.plugins import GeneralPlugin
+from GlyphsApp.plugins import pathForResource
+from Cocoa import NSButton, NSUserDefaultsController, NSImage, NSColor, NSTexturedRoundedBezelStyle, NSImageOnly, NSImageScaleNone, NSToggleButton, NSMakeRect, NSRectFill, NSNotificationCenter, NSLog
+
 
 class ShowUnderline(GeneralPlugin):
+
 	@objc.python_method
 	def settings(self):
 		self.name = Glyphs.localize({'en': u'Show Underline', 'de': u'Unterstrichen'})
+
 	@objc.python_method
 	def start(self):
 		#Glyphs.addCallback(self.addUnderlineButton_, TABDIDOPEN)
@@ -23,8 +26,9 @@ class ShowUnderline(GeneralPlugin):
 
 		# load icon from bundle
 		iconPath = pathForResource("underLineTemplate", "pdf", __file__)
-		self.toolBarIcon = NSImage.alloc().initWithContentsOfFile_(iconPath)
-		self.toolBarIcon.setTemplate_(True)
+		if iconPath:
+			self.toolBarIcon = NSImage.alloc().initWithContentsOfFile_(iconPath)
+			self.toolBarIcon.setTemplate_(True)
 
 	def addUnderlineButton_(self, notification):
 		Tab = notification.object()
@@ -52,7 +56,7 @@ class ShowUnderline(GeneralPlugin):
 			button = Tab.tempData["underlineButton"] # Glyphs 3
 		except:
 			button = Tab.userData["underlineButton"] # Glyphs 2
-		if button != None:
+		if button:
 			button.unbind_("value")
 			userDefaults = NSUserDefaultsController.sharedUserDefaultsController()
 			userDefaults.removeObserver_forKeyPath_(Tab.graphicView(), "values.GeorgSeifert_showUnderline")
@@ -64,17 +68,16 @@ class ShowUnderline(GeneralPlugin):
 				master = layer.associatedFontMaster()
 				thinkness = master.customParameters["underlineThickness"]
 				position = master.customParameters["underlinePosition"]
-				if thinkness != None and position != None:
+				if thinkness is not None and position is not None:
 					thinkness = float(thinkness)
 					position = float(position)
 					rect = NSMakeRect(0, position - (thinkness * 0.5), layer.width, thinkness)
-					NSColor.colorWithDeviceRed_green_blue_alpha_(64.0/255.0, 79.0/255.0, 104.0/255.0, 1).set()
+					NSColor.colorWithDeviceRed_green_blue_alpha_(64.0 / 255.0, 79.0 / 255.0, 104.0 / 255.0, 1).set()
 					NSRectFill(rect)
 		except:
 			NSLog(traceback.format_exc())
-	
+
 	@objc.python_method
 	def __file__(self):
 		"""Please leave this method unchanged"""
 		return __file__
-	
