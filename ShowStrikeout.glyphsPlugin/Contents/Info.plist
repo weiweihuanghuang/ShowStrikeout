@@ -7,24 +7,22 @@
 	<key>CFBundleExecutable</key>
 	<string>plugin</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.GeorgSeifert.ShowUnderline</string>
+	<string>com.wwwhhhhh.ShowStrikeout</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>ShowUnderline</string>
+	<string>ShowStrikeout</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.5</string>
+	<string>0.1</string>
 	<key>CFBundleVersion</key>
-	<string>8</string>
+	<string>1</string>
 	<key>UpdateFeedURL</key>
-	<string>https://raw.githubusercontent.com/schriftgestalt/ShowUnderline/master/ShowUnderline.glyphsPlugin/Contents/Info.plist</string>
+	<string>https://raw.githubusercontent.com/weiweihuanghuang/ShowStrikeout/refs/heads/master/ShowStrikeout.glyphsPlugin/Contents/Info.plist</string>
 	<key>productPageURL</key>
-	<string>https://github.com/schriftgestalt/ShowUnderline</string>
-	<key>productReleaseNotes</key>
-	<string>Fixed missing underline in Edit View.</string>
+	<string>https://github.com/weiweihuanghuang/ShowStrikeout</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright, GeorgSeifert, 2016</string>
+	<string>Copyright, GeorgSeifert, 2016, Wei Huang, 2026</string>
 	<key>NSPrincipalClass</key>
-	<string>ShowUnderline</string>
+	<string>ShowStrikeout</string>
 </dict>
 </plist>

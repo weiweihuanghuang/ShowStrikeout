@@ -1,6 +1,6 @@
-# ShowUnderline
+# ShowStrikeout
 
-A Plugin for [Glyphsapp](glyphsapp.com). It installs an icon into the bottom toolbar and draws a preview of the underline.
+A Plugin for [Glyphsapp](glyphsapp.com). It installs an icon into the bottom toolbar and draws a preview of the strikeout.
 
 ![Screenshot](Screenshot.png)
 
@@ -15,8 +15,8 @@ or
  
 ### Usage Instructions
 
-1. Set the `underlineThickness` and `underlinePosition` in all masters.
-2. Click the <u>`U`</u> icon in the bottom bar.
+1. Set the `strikeoutSize` and `strikeoutPosition` in all masters.
+2. Click the <s>`S`</s> icon in the bottom bar.
 
 ### Requirements
 

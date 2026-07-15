@@ -9,28 +9,28 @@ from GlyphsApp.plugins import pathForResource
 from Cocoa import NSButton, NSUserDefaultsController, NSImage, NSColor, NSTexturedRoundedBezelStyle, NSImageOnly, NSImageScaleNone, NSToggleButton, NSMakeRect, NSRectFill, NSNotificationCenter, NSLog
 
 
-class ShowUnderline(GeneralPlugin):
+class ShowStrikeout(GeneralPlugin):
 
 	@objc.python_method
 	def settings(self):
-		self.name = Glyphs.localize({'en': u'Show Underline', 'de': u'Unterstrichen'})
+		self.name = Glyphs.localize({'en': u'Show Strikeout', 'de': u'Durchgestrichen'})
 
 	@objc.python_method
 	def start(self):
-		#Glyphs.addCallback(self.addUnderlineButton_, TABDIDOPEN)
-		#Glyphs.addCallback(self.removeUnderlineButton_, TABWILLCLOSE)
-		NSNotificationCenter.defaultCenter().addObserver_selector_name_object_(self, "addUnderlineButton:", TABDIDOPEN, objc.nil)
-		NSNotificationCenter.defaultCenter().addObserver_selector_name_object_(self, "removeUnderlineButton:", TABWILLCLOSE, objc.nil)
-		Glyphs.addCallback(self.drawUnderline, DRAWBACKGROUND)
-		Glyphs.addCallback(self.drawUnderline, DRAWINACTIVE)
+		#Glyphs.addCallback(self.addStrikeoutButton_, TABDIDOPEN)
+		#Glyphs.addCallback(self.removeStrikeoutButton_, TABWILLCLOSE)
+		NSNotificationCenter.defaultCenter().addObserver_selector_name_object_(self, "addStrikeoutButton:", TABDIDOPEN, objc.nil)
+		NSNotificationCenter.defaultCenter().addObserver_selector_name_object_(self, "removeStrikeoutButton:", TABWILLCLOSE, objc.nil)
+		Glyphs.addCallback(self.drawStrikeout, DRAWBACKGROUND)
+		Glyphs.addCallback(self.drawStrikeout, DRAWINACTIVE)
 
 		# load icon from bundle
-		iconPath = pathForResource("underLineTemplate", "pdf", __file__)
+		iconPath = pathForResource("strikeOutTemplate", "pdf", __file__)
 		if iconPath:
 			self.toolBarIcon = NSImage.alloc().initWithContentsOfFile_(iconPath)
 			self.toolBarIcon.setTemplate_(True)
 
-	def addUnderlineButton_(self, notification):
+	def addStrikeoutButton_(self, notification):
 		Tab = notification.object()
 		if hasattr(Tab, "addViewToBottomToolbar_"):
 			button = NSButton.alloc().initWithFrame_(NSMakeRect(0, 0, 18, 14))
@@ -43,35 +43,35 @@ class ShowUnderline(GeneralPlugin):
 			button.setImage_(self.toolBarIcon)
 			Tab.addViewToBottomToolbar_(button)
 			try:
-				Tab.tempData["underlineButton"] = button # Glyphs 3
+				Tab.tempData["strikeoutButton"] = button # Glyphs 3
 			except:
-				Tab.userData["underlineButton"] = button # Glyphs 2
+				Tab.userData["strikeoutButton"] = button # Glyphs 2
 			userDefaults = NSUserDefaultsController.sharedUserDefaultsController()
-			button.bind_toObject_withKeyPath_options_("value", userDefaults, objcObject("values.GeorgSeifert_showUnderline"), None)
-			userDefaults.addObserver_forKeyPath_options_context_(Tab.graphicView(), objcObject("values.GeorgSeifert_showUnderline"), 0, 123)
+			button.bind_toObject_withKeyPath_options_("value", userDefaults, objcObject("values.GeorgSeifert_showStrikeout"), None)
+			userDefaults.addObserver_forKeyPath_options_context_(Tab.graphicView(), objcObject("values.GeorgSeifert_showStrikeout"), 0, 123)
 
-	def removeUnderlineButton_(self, notification):
+	def removeStrikeoutButton_(self, notification):
 		Tab = notification.object()
 		try:
-			button = Tab.tempData["underlineButton"] # Glyphs 3
+			button = Tab.tempData["strikeoutButton"] # Glyphs 3
 		except:
-			button = Tab.userData["underlineButton"] # Glyphs 2
+			button = Tab.userData["strikeoutButton"] # Glyphs 2
 		if button:
 			button.unbind_("value")
 			userDefaults = NSUserDefaultsController.sharedUserDefaultsController()
-			userDefaults.removeObserver_forKeyPath_(Tab.graphicView(), "values.GeorgSeifert_showUnderline")
+			userDefaults.removeObserver_forKeyPath_(Tab.graphicView(), "values.GeorgSeifert_showStrikeout")
 
 	@objc.python_method
-	def drawUnderline(self, layer, options):
+	def drawStrikeout(self, layer, options):
 		try:
-			if Glyphs.boolDefaults["GeorgSeifert_showUnderline"]:
+			if Glyphs.boolDefaults["GeorgSeifert_showStrikeout"]:
 				master = layer.associatedFontMaster()
-				thinkness = master.customParameters["underlineThickness"]
-				position = master.customParameters["underlinePosition"]
-				if thinkness is not None and position is not None:
-					thinkness = float(thinkness)
+				size = master.customParameters["strikeoutSize"]
+				position = master.customParameters["strikeoutPosition"]
+				if size is not None and position is not None:
+					size = float(size)
 					position = float(position)
-					rect = NSMakeRect(0, position - (thinkness * 0.5), layer.width, thinkness)
+					rect = NSMakeRect(0, position - size, layer.width, size)
 					NSColor.colorWithDeviceRed_green_blue_alpha_(64.0 / 255.0, 79.0 / 255.0, 104.0 / 255.0, 1).set()
 					NSRectFill(rect)
 		except:
